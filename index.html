@@ -13,7 +13,12 @@
 </head>
 <body>
 	<h1>Liferay OAuth2 Tester</h1>
-	<span class="message">You must configure in your Liferay Portal an OAuth2 Application and set as callback: <u><i>http://martamedio.com/oauth2-tester/?url=YOUR_LIFERAY_URL&client_id=YOUR_CLIENT_ID</i></u></span>
+	<div class="message">You must configure in your Liferay Portal an OAuth2 Application and set<br />
+		<ul>
+			<li>callback: <u><i><span id="callbackURI"></span>?url=YOUR_LIFERAY_URL&client_id=YOUR_CLIENT_ID</i></u></li>
+			<li>scope: <i>everything.read.userprofile</i></li>
+		</ul>
+	</div>
 	<div class="accordion">
 		<div class="card">
 		    <div class="card-header" id="auth">
@@ -26,7 +31,7 @@
 		    	<form id="authForm">
 			        <div class="form-group">
 			            <label for="liferayUrl">Liferay Portal URL:</label>
-			            <input type="text" class="form-control" id="liferayUrl" name="liferayUrl" required="required" />
+			            <input type="text" class="form-control" id="liferayUrl" name="liferayUrl" required="required" value="http://localhost:8080" />
 			        </div>
 			        <div class="form-row">
 		    			<div class="col-6">
@@ -97,7 +102,7 @@
 			      <div class="form-row">
 			         <div class="col-6">
 			            <label for="service">URL:</label>
-			            <input type="text" name="url" id="url" class="form-control" required="required" />
+			            <input type="text" name="url" id="url" class="form-control" required="required" value="http://localhost:8080/api/jsonws/user/get-current-user" />
 			         </div>
 			         <div class="col-2">
 			            <label for="type">Method:</label>
@@ -131,10 +136,16 @@
 			            <button id="getApioCustom" class="btn btn-primary" onclick="request(event, $('#service').val());">Launch Request</button>
 			         </div>
 			         <div class="col-6">
-			            <label for="token">Token: </label>
+			            <label for="token">Access Token: </label>
 			            <input type="text" disabled="disabled" id="token" name="token" class="form-control form-control-sm" />
 			            <br/>
-			            <button id="refreshTokenButton" class="btn btn-warning btn-sm" onclick="refreshToken(event);">Refresh Token</button>
+			            <button id="refreshTokenButton" class="btn btn-warning btn-sm" onclick="refreshAccessToken(event);">Refresh Token</button>
+			            <button id="introspectTokenButton" class="btn btn-warning btn-sm" onclick="introspectAccessToken(event);">Introspect Access Token</button>
+			            <br/>
+			            <label for="refreshToken">Refresh Token: </label>
+			            <input type="text" disabled="disabled" id="refreshToken" name="refreshToken" class="form-control form-control-sm" />
+			            <br/>
+			            <button id="introspectRefreshTokenButton" class="btn btn-warning btn-sm" onclick="introspectRefreshToken(event);">Introspect Refresh Token</button>
 			         </div>
 			      </div>
 			   </form>

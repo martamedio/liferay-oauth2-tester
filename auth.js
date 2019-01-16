@@ -14,6 +14,9 @@ function getAuthorizationCode() {
 }
 
 $(document).ready(function() {
+
+    $("#callbackURI").text(location.origin + location.pathname);
+
     /*
      * Recover Auth Code from URL and Obtain Token 
      */
@@ -85,6 +88,7 @@ function getToken() {
                 TOKEN = data.access_token;
                 REFRESH_TOKEN = data.refresh_token;
                 $('#token').val(TOKEN);
+                $('#refreshToken').val(REFRESH_TOKEN);
                 $('#collapseTwo').hide();
                 $('#tokenTab > h2 > button').css('color', 'green');
                 $('#collapseThree').show();
@@ -99,9 +103,69 @@ function getToken() {
 }
 
 /*
+ * Introspect Token
+ */
+function introspectAccessToken(e) {
+    e.preventDefault();
+    $.ajax({
+        url: $('#tokenLiferayUrl').val() + "/o/oauth2/introspect",
+        method: 'POST',
+        data: {
+            client_id: $('#tokenClientId').val(),
+            client_secret: $('#clientSecretId').val(),
+            token: $('#token').val(),
+            token_type_hint: 'access_token'
+        },
+        crossDomain: true,
+        contentType: 'application/x-www-form-urlencoded',
+        headers: {
+            Accept: "application/json"
+        },
+        dataType: 'json',
+        success: function(data) {
+            $('#result').html(JSON.stringify(data));
+        },
+        error: function(data) {
+            alert("There's a problem with your authorization access");
+            console.log(data);
+        }
+
+    });
+}
+
+function introspectRefreshToken(e) {
+    e.preventDefault();
+    $.ajax({
+        url: $('#tokenLiferayUrl').val() + "/o/oauth2/introspect",
+        method: 'POST',
+        data: {
+            client_id: $('#tokenClientId').val(),
+            client_secret: $('#clientSecretId').val(),
+            token: $('#refreshToken').val(),
+            token_type_hint: 'refresh_token'
+        },
+        crossDomain: true,
+        contentType: 'application/x-www-form-urlencoded',
+        headers: {
+            Accept: "application/json"
+        },
+        dataType: 'json',
+        success: function(data) {
+            $('#result').html(JSON.stringify(data));
+        },
+        error: function(data) {
+            alert("There's a problem with your authorization access");
+            console.log(data);
+        }
+
+    });
+}
+
+
+/*
  * Refresh Token
  */
-function refreshToken(e) {
+function refreshAccessToken(e) {
     e.preventDefault();
     $.ajax({
         url: $('#tokenLiferayUrl').val() + $('#tokenUrl').val(),
@@ -122,6 +186,7 @@ function refreshToken(e) {
             TOKEN = data.access_token;
             REFRESH_TOKEN = data.refresh_token;
             $('#token').val(TOKEN);
+            $('#refreshToken').val(REFRESH_TOKEN);
         },
         error: function(data) {
             alert("There's a problem with your authorization access");
@@ -130,7 +195,6 @@ function refreshToken(e) {
 
     });
 }
-
 /*
  * Step 3: Make Request
  */
