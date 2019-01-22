@@ -138,20 +138,37 @@
 			         <div class="col-6">
 			            <label for="token">Access Token: </label>
 			            <input type="text" disabled="disabled" id="token" name="token" class="form-control form-control-sm" />
-			            <br/>
-			            <button id="refreshTokenButton" class="btn btn-warning btn-sm" onclick="refreshAccessToken(event);">Refresh Token</button>
-			            <button id="introspectTokenButton" class="btn btn-warning btn-sm" onclick="introspectAccessToken(event);">Introspect Access Token</button>
-			            <br/>
-			            <label for="refreshToken">Refresh Token: </label>
-			            <input type="text" disabled="disabled" id="refreshToken" name="refreshToken" class="form-control form-control-sm" />
-			            <br/>
-			            <button id="introspectRefreshTokenButton" class="btn btn-warning btn-sm" onclick="introspectRefreshToken(event);">Introspect Refresh Token</button>
-			         </div>
-			      </div>
-			   </form>
-			   <hr/>
-			   <h5>Request Result: </h5>
-			   <div id="result"></div>
+					 </div>
+				  </div>
+				  <div class="row">
+					  <div class="col-6"></div>					  
+			          <div class="col-6">
+						  <button id="refreshTokenButton" class="btn btn-warning btn-sm" onclick="refreshAccessToken(event);">Refresh Token</button>
+						  <button id="introspectTokenButton" class="btn btn-warning btn-sm" onclick="introspectAccessToken(event);">Introspect Access Token</button>
+					   </div>
+				  </div>
+				  <div class="row">
+						<div class="col-6"></div>
+						<div class="col-6">
+			            	<label for="refreshToken">Refresh Token: </label>
+							<input type="text" disabled="disabled" id="refreshToken" name="refreshToken" class="form-control form-control-sm" />
+						</div>
+				  </div>
+				  <div class="row">
+						<div class="col-6"></div>
+						<div class="col-6">
+							<button id="introspectRefreshTokenButton" class="btn btn-warning btn-sm" onclick="introspectRefreshToken(event);">Introspect Refresh Token</button>
+						</div>
+					 </div>
+					 <div class="row">
+						<div class="col-12"><h5>Request Result: </h5></div>
+						<div class="col-12" id="result">
+								
+						</div>
+					 </div>
+				  </div>
+				  
+			   </form>			   
 			</div>
 		</div>
 
