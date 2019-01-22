@@ -19,12 +19,44 @@
 			<li>scope: <i>everything.read.userprofile</i></li>
 		</ul>
 	</div>
+
+	<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5>Insert the following data:</h5>
+			</div>
+			<div class="modal-body">
+				<form id="modalForm">
+					<div class="form-row">
+						<label for="modalClientId">Liferay URL:</label>
+						<input type="text" class="form-control" name="modalLiferayUrl" id="modalLiferayUrl" required="required" value="http://localhost:8080" />
+					</div>
+					<div class="form-row">
+						<label for="modalClientId">Client ID:</label>
+						<input type="text" class="form-control" name="modalClientId" id="modalClientId" required="required" />
+					</div>
+					<div class="form-row">
+						<label for="modalClientSecret">Client Secret:</label>
+						<input type="text" class="form-control" name="modalClientSecret" id="modalClientSecret" required="required" />
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" onclick="copyModalData();">Continue</button>
+			</div>
+			</div>
+		</div>
+		</div>
+
 	<div class="accordion">
 		<div class="card">
 		    <div class="card-header" id="auth">
-		        <h2>
-		        	<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">1. Obtain Liferay Authorization</button>
-		        </h2>
+				<div class="form-row">
+					<div class="col-6"><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">1. Obtain Liferay Authorization</button></h2></div>
+					<div class="col-6 alignRight"><button id="haveToken" data-toggle="modal" data-target="#modal" class="btn btn-warning">I already have a Token</button></div>
+				</div>
 		    </div>
 
 		    <div id="collapseOne" class="collapse show" aria-labelledby="auth" data-parent="#accordion">
@@ -137,7 +169,7 @@
 			         </div>
 			         <div class="col-6">
 			            <label for="token">Access Token: </label>
-			            <input type="text" disabled="disabled" id="token" name="token" class="form-control form-control-sm" />
+			            <input type="text" id="token" name="token" class="form-control form-control-sm" />
 					 </div>
 				  </div>
 				  <div class="row">
@@ -151,7 +183,7 @@
 						<div class="col-6"></div>
 						<div class="col-6">
 			            	<label for="refreshToken">Refresh Token: </label>
-							<input type="text" disabled="disabled" id="refreshToken" name="refreshToken" class="form-control form-control-sm" />
+							<input type="text" id="refreshToken" name="refreshToken" class="form-control form-control-sm" />
 						</div>
 				  </div>
 				  <div class="row">

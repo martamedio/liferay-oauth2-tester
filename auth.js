@@ -1,6 +1,3 @@
-var TOKEN = "";
-var REFRESH_TOKEN = "";
-
 /*
  * Step 1: Obtain Authorization Code from Liferay Configured Application with ClientID (Callback URL must be this application)
  */
@@ -10,6 +7,22 @@ function getAuthorizationCode() {
         var liferayUrl = $('#liferayUrl').val();
         var redirectUri = encodeURIComponent(window.location.href + "?url=" + liferayUrl + "&client_id=" + clientId);
         window.location.href = $('#liferayUrl').val() + $('#authorizeUrl').val() + ("?client_id={0}&response_type=code&redirect_uri={1}".replace("{0}", clientId)).replace("{1}", redirectUri);
+    }
+}
+
+/*
+ * Function to get needed data when you already have a token
+ */
+function copyModalData(){
+    if ($('#modalForm').valid()) {
+        $('#tokenLiferayUrl').val($('#modalLiferayUrl').val())
+        $('#tokenClientId').val($('#modalClientId').val());
+        $('#clientSecretId').val($('#modalClientSecret').val());
+        
+        $('#modal').modal('hide');
+        $('#collapseOne').hide();
+        $('#collapseTwo').hide();
+        $('#collapseThree').show();
     }
 }
 
@@ -85,10 +98,8 @@ function getToken() {
             },
             dataType: 'json',
             success: function(data) {
-                TOKEN = data.access_token;
-                REFRESH_TOKEN = data.refresh_token;
-                $('#token').val(TOKEN);
-                $('#refreshToken').val(REFRESH_TOKEN);
+                $('#token').val(data.access_token);
+                $('#refreshToken').val(data.refresh_token);
                 $('#collapseTwo').hide();
                 $('#tokenTab > h2 > button').css('color', 'green');
                 $('#collapseThree').show();
@@ -103,62 +114,73 @@ function getToken() {
 }
 
 /*
- * Introspect Token
+ * Function for Introspect the Access Token
  */
 function introspectAccessToken(e) {
     e.preventDefault();
-    $.ajax({
-        url: $('#tokenLiferayUrl').val() + "/o/oauth2/introspect",
-        method: 'POST',
-        data: {
-            client_id: $('#tokenClientId').val(),
-            client_secret: $('#clientSecretId').val(),
-            token: $('#token').val(),
-            token_type_hint: 'access_token'
-        },
-        crossDomain: true,
-        contentType: 'application/x-www-form-urlencoded',
-        headers: {
-            Accept: "application/json"
-        },
-        dataType: 'json',
-        success: function(data) {
-            $('#result').html(JSON.stringify(data));
-        },
-        error: function(data) {
-            alert("There's a problem with your authorization access");
-            console.log(data);
-        }
+    if ($('#token').val().trim() != ""){
+        $.ajax({
+            url: $('#tokenLiferayUrl').val() + "/o/oauth2/introspect",
+            method: 'POST',
+            data: {
+                client_id: $('#tokenClientId').val(),
+                client_secret: $('#clientSecretId').val(),
+                token: $('#token').val(),
+                token_type_hint: 'access_token'
+            },
+            crossDomain: true,
+            contentType: 'application/x-www-form-urlencoded',
+            headers: {
+                Accept: "application/json"
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('#result').html(JSON.stringify(data));
+            },
+            error: function(data) {
+                alert("There's a problem with your authorization access");
+                console.log(data);
+            }
 
-    });
+        });
+    } else {
+        alert ("Please, insert a valid Access Token");
+    }
 }
 
+/*
+ * Function for Introspect the Refresh Token
+ */
 function introspectRefreshToken(e) {
     e.preventDefault();
-    $.ajax({
-        url: $('#tokenLiferayUrl').val() + "/o/oauth2/introspect",
-        method: 'POST',
-        data: {
-            client_id: $('#tokenClientId').val(),
-            client_secret: $('#clientSecretId').val(),
-            token: $('#refreshToken').val(),
-            token_type_hint: 'refresh_token'
-        },
-        crossDomain: true,
-        contentType: 'application/x-www-form-urlencoded',
-        headers: {
-            Accept: "application/json"
-        },
-        dataType: 'json',
-        success: function(data) {
-            $('#result').html(JSON.stringify(data));
-        },
-        error: function(data) {
-            alert("There's a problem with your authorization access");
-            console.log(data);
-        }
+    if ($('#refreshToken').val().trim() != ""){
+        $.ajax({
+            url: $('#tokenLiferayUrl').val() + "/o/oauth2/introspect",
+            method: 'POST',
+            data: {
+                client_id: $('#tokenClientId').val(),
+                client_secret: $('#clientSecretId').val(),
+                token: $('#refreshToken').val(),
+                token_type_hint: 'refresh_token'
+            },
+            crossDomain: true,
+            contentType: 'application/x-www-form-urlencoded',
+            headers: {
+                Accept: "application/json"
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('#result').html(JSON.stringify(data));
+            },
+            error: function(data) {
+                alert("There's a problem with your authorization access");
+                console.log(data);
+            }
 
-    });
+        });
+    } else {
+        alert ("Please, insert a valid Refresh Token");
+    }
 }
 
 
@@ -167,33 +189,35 @@ function introspectRefreshToken(e) {
  */
 function refreshAccessToken(e) {
     e.preventDefault();
-    $.ajax({
-        url: $('#tokenLiferayUrl').val() + $('#tokenUrl').val(),
-        method: 'POST',
-        data: {
-            client_id: $('#tokenClientId').val(),
-            client_secret: $('#clientSecretId').val(),
-            refresh_token: REFRESH_TOKEN,
-            grant_type: 'refresh_token',
-        },
-        crossDomain: true,
-        contentType: 'application/x-www-form-urlencoded',
-        headers: {
-            Accept: "application/json"
-        },
-        dataType: 'json',
-        success: function(data) {
-            TOKEN = data.access_token;
-            REFRESH_TOKEN = data.refresh_token;
-            $('#token').val(TOKEN);
-            $('#refreshToken').val(REFRESH_TOKEN);
-        },
-        error: function(data) {
-            alert("There's a problem with your authorization access");
-            console.log(data);
-        }
+    if ($('#refreshToken').val().trim() != ""){
+        $.ajax({
+            url: $('#tokenLiferayUrl').val() + $('#tokenUrl').val(),
+            method: 'POST',
+            data: {
+                client_id: $('#tokenClientId').val(),
+                client_secret: $('#clientSecretId').val(),
+                refresh_token: $('#refreshToken').val(),
+                grant_type: 'refresh_token',
+            },
+            crossDomain: true,
+            contentType: 'application/x-www-form-urlencoded',
+            headers: {
+                Accept: "application/json"
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('#token').val(data.access_token);
+                $('#refreshToken').val(data.refresh_token);
+            },
+            error: function(data) {
+                alert("There's a problem with your authorization access");
+                console.log(data);
+            }
 
-    });
+        });
+    } else {
+        alert ("Please, insert a valid Refresh Token");
+    }
 }
 /*
  * Step 3: Make Request
@@ -202,35 +226,40 @@ function request(e) {
     e.preventDefault();
     $('#result').html('');
     var paramsData = getParamsData();
-    $.ajax({
-        url: $('#url').val(),
-        method: $('#methodType').val(),
-        headers: {
-            Authorization: 'Bearer ' + TOKEN
-        },
-        contentType: $('#contentType').val(),
-        crossDomain: true,
-        data: JSON.stringify(paramsData),
-        dataType: 'json',
-        error: function(jqXHR, exception) {
-            var msg = '';
-            if (jqXHR.status === 403) {
-                msg = "403 - Unauthorized!";
-            } else if (jqXHR.status == 404) {
-                msg = '404 - Not Found';
-            } else if (jqXHR.status == 405) {
-                msg = '405 - Not Allowed';
-            } else if (jqXHR.status == 415) {
-                msg = '415 - Unsupported Media Type';
-            } else {
-                msg = 'Error: ' + jqXHR.responseText;
+    var token = $('#token').val();
+    if (token.trim() != ''){
+        $.ajax({
+            url: $('#url').val(),
+            method: $('#methodType').val(),
+            headers: {
+                Authorization: 'Bearer ' + token
+            },
+            contentType: $('#contentType').val(),
+            crossDomain: true,
+            data: JSON.stringify(paramsData),
+            dataType: 'json',
+            error: function(jqXHR, exception) {
+                var msg = '';
+                if (jqXHR.status === 403) {
+                    msg = "403 - Unauthorized!";
+                } else if (jqXHR.status == 404) {
+                    msg = '404 - Not Found';
+                } else if (jqXHR.status == 405) {
+                    msg = '405 - Not Allowed';
+                } else if (jqXHR.status == 415) {
+                    msg = '415 - Unsupported Media Type';
+                } else {
+                    msg = 'Error: ' + jqXHR.responseText;
+                }
+                alert(msg);
+            },
+            success: function(data) {
+                $('#result').html(JSON.stringify(data));
             }
-            alert(msg);
-        },
-        success: function(data) {
-            $('#result').html(JSON.stringify(data));
-        }
-    });
+        });
+    } else {
+        alert ("Please, insert a valid Access Token");
+    }
 }
 
 /*
