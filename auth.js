@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     if (urlParams('code')) {
         $('#collapseOne').hide();
-        $('#auth > h2 > button').css('color', 'green');
+        $('h2#step1 > button').css('color', 'green');
         $('#collapseTwo').show();
 
         $('#code').val(urlParams('code'));
@@ -101,7 +101,7 @@ function getToken() {
                 $('#token').val(data.access_token);
                 $('#refreshToken').val(data.refresh_token);
                 $('#collapseTwo').hide();
-                $('#tokenTab > h2 > button').css('color', 'green');
+                $('h2#step2 > button').css('color', 'green');
                 $('#collapseThree').show();
             },
             error: function(data) {
