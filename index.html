@@ -13,11 +13,19 @@
 </head>
 <body>
 	<h1>Liferay OAuth2 Tester</h1>
-	<div class="message">You must configure in your Liferay Portal an OAuth2 Application and set<br />
-		<ul>
-			<li>callback: <u><i><span id="callbackURI"></span>?url=YOUR_LIFERAY_URL&client_id=YOUR_CLIENT_ID</i></u></li>
-			<li>scope: <i>everything.read.userprofile</i></li>
-		</ul>
+	<div class="row">
+		<div class="col-8">
+			<h1>Liferay OAuth2 Tester</h1>
+			<div class="message">You must configure in your Liferay Portal an OAuth2 Application and set<br />
+				<ul>
+					<li>callback: <u><i><span id="callbackURI"></span>?url=YOUR_LIFERAY_URL&client_id=YOUR_CLIENT_ID</i></u></li>
+					<li>scope: <i>everything.read.userprofile</i></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4">
+			<a href="pkce" class="btn btn-info">Use PKCE Authorization Code Grant Flow</a>
+		</div>
 	</div>
 
 	<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
