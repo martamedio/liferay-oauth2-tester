@@ -72,7 +72,7 @@
 
 			<div id="collapseOne" class="collapse show" aria-labelledby="auth" data-parent="#accordion">
 				<form id="authFormPKCE">
-					<div class="form-row">
+					<div class="form-group form-row">
 						<div class="col-6">
 							<label for="liferayUrl">Liferay Portal URL:</label>
 							<input type="text" class="form-control" id="liferayUrlPKCE" name="liferayUrlPKCE" required="required" value="http://localhost:8080" />
@@ -83,18 +83,26 @@
 						</div>
 					</div>
 					<div class="form-row">
-						<div class="col-6">
+						<div class="col-3">
 							<label for="clientIdPCKE">Client ID:</label>
 							<input type="text" class="form-control" id="clientIdPCKE" name="clientIdPCKE" required="required" />
 						</div>
-						<div class="col-6">
-							<label for="service">Code Challengue:</label>
-							<input type="text" name="codeChallengue" id="codeChallengue" value="" class="form-control" required="required"/>
+						<div class="col-9">
+								<div class="form-row">
+								<div class="col-4">
+									<label for="service">Code Challenge:</label>
+									<input type="text" name="codeChallenge" id="codeChallenge" disabled="disabled" class="form-control" required="required"/>
+								</div>
+								<div class="col-8">
+									<label for="service">Base64 SHA256 Encoded Code Challenge:</label>
+									<input type="text" name="convertedCodeChallenge" id="convertedCodeChallenge" class="form-control" disabled="disabled"/>
+								</div>
+							</div>
 						</div>
 					</div>
 				</form>
-
-				<button class="btn btn-primary" id="getAuthorizationPCKE" onclick="authorizePKCE();">Authorize My Application (PKCE)</button>
+				<button class="btn btn-primary" onclick="generateCodeChallenge();">Generate a Code Challenge</button>
+				<button class="btn btn-primary" id="getAuthorizationPCKE" disabled="disabled" onclick="authorizePKCE();">Authorize My Application (PKCE)</button>
 			</div>
 		</div>			
 

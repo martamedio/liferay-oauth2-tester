@@ -5,27 +5,42 @@ function authorizePKCE(){
     if ($('#authFormPKCE').valid()) {
         var clientId = $('#clientIdPCKE').val();
         var liferayUrl = $('#liferayUrlPKCE').val();
-        var codeChallengue = getEncodedCodeChallengue();
+        var codeChallenge = $('#convertedCodeChallenge').val()
 
         var redirectUri = encodeURIComponent(window.location.href + "?url=" + liferayUrl + "&client_id=" + clientId);
-        window.location.href = liferayUrl + $('#authorizeUrlPKCE').val() + ("?client_id={0}&response_type=code&redirect_uri={1}&code_challenge={2}").replace("{0}", clientId).replace("{1}", redirectUri).replace("{2}", codeChallengue);
+        window.location.href = liferayUrl + $('#authorizeUrlPKCE').val() + ("?client_id={0}&response_type=code&redirect_uri={1}&code_challenge={2}").replace("{0}", clientId).replace("{1}", redirectUri).replace("{2}", codeChallenge);
     }
+}
+/*
+* Generate random string as Code Challenge
+*/
+function generateCodeChallenge(){
+    var length = 12;
+    var randomString = "";
+    var dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < length; i++) {
+        randomString += dictionary.charAt(Math.floor(Math.random() * dictionary.length));
+    }
+    $('#codeChallenge').val(randomString);
+    getEncodedCodeChallenge();
 }
 
 /*
 * Encode Code Challenge as indicated at PKCE specification: BaseURLEncode(SHA256(code-challengue))
 */
-function getEncodedCodeChallengue(){
+function getEncodedCodeChallenge(){
     CryptoJS.enc.Base64URL = {
         parse: CryptoJS.enc.Base64.parse,
         stringify: CryptoJS.enc.Base64.stringify,
         _map: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
     };
 
-    var code = CryptoJS.enc.Utf8.parse($('#codeChallengue').val());
+    var code = CryptoJS.enc.Utf8.parse($('#codeChallenge').val());
     var codeSHA256 = CryptoJS.SHA256(code);
 
-    return CryptoJS.enc.Base64URL.stringify(codeSHA256);
+    $('#convertedCodeChallenge').val(CryptoJS.enc.Base64URL.stringify(codeSHA256));
+
+    $('#getAuthorizationPCKE').prop('disabled', false);
 }
 
 /*
